@@ -1,5 +1,7 @@
 name: CI
 on: [push]
+- name: Rezilion
+  uses: Rezilion/github-action@v2.3.0
 jobs:
   test-sanity:
     runs-on: ubuntu-latest
