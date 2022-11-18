@@ -8,12 +8,12 @@ jobs:
     env:
       REZILION_LICENSE_KEY: ${{ secrets.REZILION_LICENSE_KEY }}
     steps:
-      uses: actions/checkout@v3
-      uses: ./.gitlab/actions/Rezilion
-      with:
-        mode: 'start'
-      image_name: 'nginx:latest'
-      command: 'sleep 5'
+      - uses: actions/checkout@v3
+      - uses: ./.gitlab/actions/Rezilion
+        with:
+          mode: 'start'
+          image_name: 'nginx:latest'
+          command: 'sleep 5'
       
   Rezilion:
     needs: [test-sanity]
@@ -23,10 +23,10 @@ jobs:
     env:
       REZILION_LICENSE_KEY: ${{ secrets.REZILION_LICENSE_KEY }}
     steps:
-      uses: actions/checkout@v3
-      uses: ./.gitlab/actions/Rezilion
-      with:
-        mode: 'validate'
+      - uses: actions/checkout@v3
+      - uses: ./.gitlab/actions/Rezilion
+        with:
+          mode: 'validate'
               
       
   
