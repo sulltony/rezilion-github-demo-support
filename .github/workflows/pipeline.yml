@@ -27,7 +27,7 @@ jobs:
       REZILION_LICENSE_KEY: ${{ secrets.REZILION_LICENSE_KEY }}
     steps:
       - uses: actions/checkout@v3
-      - uses: ./.gitlab/actions/Rezilion
+      - uses: ./.github/actions/Rezilion
         with:
           mode: 'validate'
               
