@@ -1,7 +1,5 @@
 name: CI
 on: [push]
-- name: Rezilion
-  uses: Rezilion/github-action@v2.3.0
 jobs:
   test-sanity:
     runs-on: ubuntu-latest
@@ -9,6 +7,9 @@ jobs:
       image: nginx:latest
     env:
       REZILION_LICENSE_KEY: ${{ secrets.REZILION_LICENSE_KEY }}
+      - name: Rezilion
+      uses: Rezilion/github-action@v2.3.0
+
     steps:
       - uses: actions/checkout@v3
       - uses: ./.gitlab/actions/Rezilion
