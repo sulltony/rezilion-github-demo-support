@@ -1,6 +1,8 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+# name: CI
+  name: Rezilion
+  uses: Rezilion/github-action@v2.3.0
 
 # Controls when the workflow will run
 on:
@@ -15,8 +17,6 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-- name: Rezilion
-  uses: Rezilion/github-action@v2.3.0
   
   # This workflow contains a single job called "build"
   build:
