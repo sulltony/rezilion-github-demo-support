@@ -1,0 +1,20 @@
+name: CI
+on: [push]
+jobs:
+  test_sanity:
+    runs-on: ubuntu-latest
+    container:
+      image: nginx:latest
+    env:
+      REZILION_LICENSE_KEY: ${{ secrets.REZILION_LICENSE_KEY }}
+    steps:
+      uses: actions/checkout@v3
+      uses: ./.gitlab/actions/Rezilion
+      with:
+        mode: 'start'
+        image_name: 'nginx:latest'
+        command: |
+              sleep 5
+              
+      
+  
