@@ -13,8 +13,7 @@ jobs:
       with:
         mode: 'start'
         image_name: 'nginx:latest'
-        command: |
-              sleep 5
+        run: 'sleep 5'
               
       
   
