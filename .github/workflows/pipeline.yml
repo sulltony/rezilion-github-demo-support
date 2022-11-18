@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Rezilion
         uses: Rezilion/github-action@v2.3.0
-      - uses: ./.gitlab/actions/Rezilion
+      - uses: ./.github/actions/Rezilion
         with:
           mode: 'start'
           image_name: 'nginx:latest'
