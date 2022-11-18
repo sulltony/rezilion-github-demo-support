@@ -1,0 +1,159 @@
+name: 'Rezilion'
+description: 'Rezilion for github'
+inputs:
+  mode:
+    description: 'Rezilion CI mode'
+    required: true
+  image_name:
+    description: 'Docker Image to validate'
+    required: false
+    default: '0'
+  command:
+    description: 'User command to validate'
+    required: false
+runs:
+  using: "composite"
+  steps:
+    - if: ${{ (inputs.mode == 'start') || (inputs.mode == 'validate') }}
+      run: |
+        REZILION_EXECUTABLE_URL="https://validate-ci-instrument.s3.eu-west-1.amazonaws.com/validate_ci_agent_v2.3.0"
+        REZILION_OUTPUTS_FOLDER=/tmp/rezilion/outputs
+        REZILION_AGENT_PATH=/tmp/rezilion/validate_ci_agent
+        
+        if command -v apk > /dev/null 2>&1 ; then
+          REZILION_EXECUTABLE_URL="AGENT_ALPINE_URL_PLACEHOLDER"
+        fi
+  
+        mkdir -p $REZILION_OUTPUTS_FOLDER
+  
+        # curl isn't installed
+        if ! command -v curl > /dev/null 2>&1 ; then
+          # install curl with apt-get
+          if command -v apt-get > /dev/null 2>&1 ; then
+            apt-get update
+            apt-get install curl -y
+  
+          # install curl with yum
+          elif command -v yum > /dev/null 2>&1 ; then
+            yum install curl -y
+          
+          # install curl with apk
+          elif command -v apk > /dev/null 2>&1 ; then
+            apk add curl
+  
+          else
+            echo "Impossible to install Rezilion without curl"
+            exit 1
+          fi
+        fi
+  
+        curl -s $REZILION_EXECUTABLE_URL --output $REZILION_AGENT_PATH
+  
+        chmod +x $REZILION_AGENT_PATH || true
+      shell: sh
+
+    - if: ${{ inputs.mode == 'start' }}
+      run: |
+        REZILION_OUTPUTS_FOLDER=/tmp/rezilion/outputs
+        REZILION_AGENT_PATH=/tmp/rezilion/validate_ci_agent
+        
+        BASE64_IMAGE="$(echo -n "${{ inputs.image_name }}" | base64)"
+        REZILION_JOB_FOLDER=$REZILION_OUTPUTS_FOLDER/$BASE64_IMAGE/$GITHUB_JOB
+        mkdir -p "$REZILION_JOB_FOLDER"
+        
+        REZILION_LDPRELOAD_OUTPUT_DIRECTORY=$REZILION_JOB_FOLDER/ldpreload
+        MINERS_STATUS_FILE_PATH=$REZILION_JOB_FOLDER/miners_status
+        STOP_MINING_FLAG_FILE_PATH=/tmp/rezilion/stop_mining
+        USER_COMMAND_PATH=/tmp/rezilion/command.sh
+        
+        if [ -f $STOP_MINING_FLAG_FILE_PATH ]; then
+          rm $STOP_MINING_FLAG_FILE_PATH
+        fi
+        
+        if [ -f $USER_COMMAND_PATH ]; then
+          rm $USER_COMMAND_PATH
+        fi
+        
+        cat << REZILIONEOFTOKEN > $USER_COMMAND_PATH
+        ${{ inputs.command }}
+        REZILIONEOFTOKEN
+        
+        chmod +x $USER_COMMAND_PATH
+        
+        echo "$REZILION_USER_COMMAND"
+        
+        $REZILION_AGENT_PATH --license-key "$REZILION_LICENSE_KEY" --ci-environment github miners --db-path "$REZILION_JOB_FOLDER/db" --ld-preload-output-directory "$REZILION_LDPRELOAD_OUTPUT_DIRECTORY" --miners-status-file "$MINERS_STATUS_FILE_PATH" --stop-dynamic-mining-flag-path $STOP_MINING_FLAG_FILE_PATH --shell-command-to-mine $USER_COMMAND_PATH --shell-command-output-file-path /tmp/rezilion/shell_command_output --shell-command-exit-code-file-path /tmp/rezilion/shell_command_exit_code >> "$REZILION_JOB_FOLDER/miners.log" 2>&1 || REZILION_FAILED_RUNNING=1
+        
+        if [ -z "$REZILION_FAILED_RUNNING" ]; then
+          cat /tmp/rezilion/shell_command_output
+          echo Command Exit Code: "$(cat </tmp/rezilion/shell_command_exit_code)"
+        
+          if [[ "$(cat </tmp/rezilion/shell_command_exit_code)" != "0" ]]; then
+            echo "Command failed"
+            exit 1
+          fi
+        
+        else
+          echo "Failed running Rezilion, running user command..."
+          sh -c "$REZILION_USER_COMMAND"
+        fi
+
+      shell: sh
+
+    - if: ${{ inputs.mode == 'start' }}
+      name: Upload output file
+      uses: actions/upload-artifact@v3
+      with:
+        name: Rezilion Test Artifacts
+        path: /tmp/rezilion/outputs
+
+    - if: ${{ inputs.mode == 'validate' }}
+      name: Download artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: Rezilion Test Artifacts
+        path: /tmp/rezilion/outputs
+
+    - if: ${{ inputs.mode == 'validate' }}
+      run: |
+        REZILION_OUTPUTS_FOLDER=/tmp/rezilion/outputs
+        REZILION_AGENT_PATH=/tmp/rezilion/validate_ci_agent
+        
+        if [[ -z "$(ls -A $REZILION_OUTPUTS_FOLDER)" ]]; then
+          echo "Rezilion found no images to validate..."
+          exit 0
+        fi
+        
+        ARTIFACT_PATH=/tmp/rezilion/artifacts
+        mkdir -p $ARTIFACT_PATH
+        
+        for dir in "$REZILION_OUTPUTS_FOLDER"/*/
+          do
+            ENCODED_DIR=$(basename -- "${dir%*/}")
+        
+            if [[ "${{ inputs.image_name }}" == "0" ]] ; then
+              IMAGE_NAME_DECODED=$(echo -n "$ENCODED_DIR" | base64 --decode) || true
+            else
+              IMAGE_NAME_DECODED="${{ inputs.image_name }}"
+            fi
+        
+            NORMALIZED_IMAGE_NAME=$(basename -- "$IMAGE_NAME_DECODED" | tr : _)
+            $REZILION_AGENT_PATH --log-path $REZILION_OUTPUTS_FOLDER/$ENCODED_DIR/validate_$NORMALIZED_IMAGE_NAME.log --license-key $REZILION_LICENSE_KEY --ci-environment github validate --tests-directory $REZILION_OUTPUTS_FOLDER/$ENCODED_DIR --html-report-path $ARTIFACT_PATH/report_$NORMALIZED_IMAGE_NAME.html --json-report-path $ARTIFACT_PATH/report_$NORMALIZED_IMAGE_NAME.json --cyclonedx-report-path $ARTIFACT_PATH/cyclonedx_report_$NORMALIZED_IMAGE_NAME.json --container-image-name $IMAGE_NAME_DECODED --scanner-name trivy || true
+        
+          done
+
+      shell: sh
+
+    - if: ${{ inputs.mode == 'validate' }}
+      name: Upload output file
+      uses: actions/upload-artifact@v3
+      with:
+        name: Rezilion Reports
+        path: /tmp/rezilion/artifacts
+
+    - if: ${{ inputs.mode == 'validate' }}
+      name: Upload output file
+      uses: actions/upload-artifact@v3
+      with:
+        name: Rezilion Test Artifacts
+        path: /tmp/rezilion/outputs
