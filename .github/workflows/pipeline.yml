@@ -12,7 +12,7 @@ jobs:
       uses: ./.gitlab/actions/Rezilion
       with:
         mode: 'start'
-        image_name: 'nginx:latest'
+      image_name: 'nginx:latest'
       run: 'sleep 5'
               
       
