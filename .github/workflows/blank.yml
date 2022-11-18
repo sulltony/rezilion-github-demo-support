@@ -15,6 +15,9 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+- name: Rezilion
+  uses: Rezilion/github-action@v2.3.0
+  
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
