@@ -10,7 +10,6 @@ jobs:
  
     steps:
       - uses: actions/checkout@v3
-      - name: Rezilion
       - uses: Rezilion/github-action@v2.3.0
         with:
           mode: 'start'
