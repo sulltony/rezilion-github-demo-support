@@ -10,7 +10,7 @@ jobs:
  
     steps:
       - uses: actions/checkout@v3
-      - uses: Rezilion/github-action@v2.3.0
+      - uses: Rezilion/github-action@v2.3.0 #example using the public action
         with:
           mode: 'start'
           image_name: 'nginx:latest'
@@ -25,7 +25,7 @@ jobs:
       REZILION_LICENSE_KEY: ${{ secrets.REZILION_LICENSE_KEY }}
     steps:
       - uses: actions/checkout@v3
-      - uses: ./.github/actions/Rezilion
+      - uses: ./.github/actions/Rezilion #example using the private action
         with:
           mode: 'validate'
               
