@@ -1,7 +1,5 @@
 name: CI
 on: [push]
-- name: Rezilion
-  uses: Rezilion/github-action@v2.5.1
 jobs:
   test-sanity:
     runs-on: ubuntu-latest
@@ -12,7 +10,7 @@ jobs:
  
     steps:
       - uses: actions/checkout@v3
-      - uses: Rezilion/github-action@v2.3.0 #example using the public action
+      - uses: Rezilion/github-action@v2.5.1 #example using the public action
         with:
           mode: 'start'
           image_name: 'nginx:latest'
