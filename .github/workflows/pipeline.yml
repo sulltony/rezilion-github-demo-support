@@ -4,7 +4,7 @@ jobs:
   test-sanity:
     runs-on: ubuntu-latest
     container:
-      image: nginx:1.19
+      image: python:3.7
     env:
       REZILION_LICENSE_KEY: ${{ secrets.REZILION_LICENSE_KEY }}
  
@@ -13,7 +13,7 @@ jobs:
       - uses: Rezilion/github-action@v2.5.1 #example using the public action
         with:
           mode: 'start'
-          image_name: 'nginx:1.19'
+          image_name: 'python3.7'
           command: 'sleep 5'
       
   Rezilion:
@@ -24,6 +24,7 @@ jobs:
     env:
       REZILION_LICENSE_KEY: ${{ secrets.REZILION_LICENSE_KEY }}
       REZILION_ACCESS_TOKEN: ${{ secrets.REZILION_ACCESS_TOKEN }}
+      REZILION_SEVERITY_GATE: "critical"
     steps:
       - uses: actions/checkout@v3
       - uses: ./.github/actions/Rezilion #example using the private action
