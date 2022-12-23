@@ -13,7 +13,7 @@ jobs:
       - uses: Rezilion/github-action@v2.5.1 #example using the public action
         with:
           mode: 'start'
-          image_name: 'python3.7'
+          image_name: 'vulhub/flask:1.1.1'
           command: 'sleep 5'
       
   Rezilion:
