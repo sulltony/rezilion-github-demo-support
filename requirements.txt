@@ -1,2 +1,2 @@
 pillow == 8.1.0
-nginx == 1.19
+python == 3.10
