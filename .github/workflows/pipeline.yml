@@ -16,7 +16,7 @@ jobs:
         with:
           image_name: 'python:3.7'
           mode: 'start'
-          command: python3 -c "from PIL import image;import time;time.sleep(5) ; print(\"Hey\")"
+          command: python3 -c "from PIL import Image; import time;time.sleep(5) ; print(\"Hey\")"
       
   Rezilion:
     needs: [test_runtimes]
