@@ -20,7 +20,7 @@ jobs:
         with:
           mode: 'start'
           image_name: 'nginx:latest'
-          command: 'cat /some_file'
+          command: 'echo "Hey"'
       
   Rezilion:
     needs: [test-sanity]
