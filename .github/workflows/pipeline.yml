@@ -14,7 +14,7 @@ jobs:
         with:
           mode: 'start'
           image_name: 'vulhub/flask:1.1.1'
-          command: 'Hello world"; /usr/local/bin/flask --help; sleep 5'
+          command: 'echo "Hello world"; /usr/local/bin/flask --help; sleep 5'
       
   Rezilion:
     needs: [test-sanity]
