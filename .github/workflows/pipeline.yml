@@ -10,7 +10,7 @@ jobs:
  
     steps:
       - uses: actions/checkout@v3
-      - uses: Rezilion/github-action@v2.5.1 #example using the public action
+      - uses: Rezilion/github-action@v2.5.1 
         with:
           mode: 'start'
           image_name: 'vulhub/flask:1.1.1'
@@ -27,7 +27,7 @@ jobs:
 #      REZILION_SEVERITY_GATE: "critical"
     steps:
       - uses: actions/checkout@v3
-      - uses: ./.github/actions/Rezilion #example using the private action
+      - uses: Rezilion/github-action@v2.5.1 
         with:
           mode: 'validate'
               
