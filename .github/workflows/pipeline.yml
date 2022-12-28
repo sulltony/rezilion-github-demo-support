@@ -4,7 +4,7 @@ jobs:
   test-sanity:
     runs-on: ubuntu-latest
     container:
-      image: vulhub/flask:1.1.1
+      image: python:3.7
     env:
       REZILION_LICENSE_KEY: ${{ secrets.REZILION_LICENSE_KEY }}
  
