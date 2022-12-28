@@ -1,7 +1,7 @@
 name: CI
 on: [push]
 jobs:
-  test-sanity:
+  test_runtimes:
     runs-on: ubuntu-latest
     container:
       image: python:3.7
@@ -10,17 +10,19 @@ jobs:
  
     steps:
       - uses: actions/checkout@v3
+      - run: pip install -r requirements.txt
+      - run: export
       - uses: Rezilion/github-action@v2.5.1 
         with:
-          mode: 'start'
           image_name: 'python:3.7'
-          command: 'echo "Hello"; python3 --version'
+          mode: 'start'
+          command: python3 -c "from PIL import image;import time;time.sleep(5) ; print(\"Hey\")"
       
   Rezilion:
-    needs: [test-sanity]
+    needs: [test_runtimes]
     runs-on: ubuntu-latest
     container:
-      image: python:3.7
+      image: rezilion/validate-ci:b63c85d0
     env:
       REZILION_LICENSE_KEY: ${{ secrets.REZILION_LICENSE_KEY }}
       REZILION_ACCESS_TOKEN: ${{ secrets.REZILION_ACCESS_TOKEN }}
