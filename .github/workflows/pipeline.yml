@@ -2,7 +2,7 @@ name: CI
 on: [push]
 jobs:
   test_runtimes:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     container:
       image: python:3.7
     env:
