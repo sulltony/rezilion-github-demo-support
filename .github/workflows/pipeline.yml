@@ -1,40 +1,57 @@
-name: CI
+name: test
 on: [push]
 jobs:
-  test-sanity:
+  test_runtimes:
     runs-on: ubuntu-latest
     container:
-      image: python:3.7
+      image: public.ecr.aws/n1j6b8j1/temp_runtimes:latest
     env:
       REZILION_LICENSE_KEY: ${{ secrets.REZILION_LICENSE_KEY }}
- 
     steps:
       - uses: actions/checkout@v3
-      - uses: Rezilion/github-action@v2.5.1 
+      - uses: ./.github/actions/Rezilion
         with:
+          image_name: 'public.ecr.aws/n1j6b8j1/temp_runtimes:latest'
           mode: 'start'
-          image_name: 'nginx:latest'
-          command: 'sleep 5'
-          
-      - uses: Rezilion/github-action@v2.5.1 
-        with:
-          mode: 'start'
-          image_name: 'nginx:latest'
-          command: 'echo "Hey"'
-      
-  Rezilion:
-    needs: [test-sanity]
+          command: |
+            timeout 10 /usr/lib/jvm/java-11-openjdk-amd64/bin/java -jar /test-war-java-11.war --httpPort=4444 || true
+            python3 -c "from PIL import Image;import time;time.sleep(5) ; print(\"Hey\")"
+            timeout 5 sh /sh_script_with_extension.sh || true
+            timeout 5 perl /perl_script_with_extension.pl || true
+            timeout 10 /usr/lib/jvm/java-11-openjdk-amd64/bin/java -jar /test-war-java-11.war --httpPort=4444 || true
+            timeout 5 node /my_app/index.js || true
+            timeout 10 /usr/lib/jvm/java-11-openjdk-amd64/bin/java -jar /test-war-java-11.war --httpPort=4444 || true
+            timeout 5 node /node_script_test.js || true
+            timeout 5 dotnet exec /NetCore_evl/LoadDLL.dll || true
+            timeout 10 /usr/lib/jvm/java-11-openjdk-amd64/bin/java -jar /test-war-java-11.war --httpPort=4444 || true
+            timeout -s 9 5 /Net5/bin/Debug/net5.0/LoadDLL || true
+            timeout -s 9 5 ruby /load_packages.rb || true
+            timeout 10 /usr/lib/jvm/java-11-openjdk-amd64/bin/java -jar /test-war-java-11.war --httpPort=4444 || true
+
+  test_alpine:
     runs-on: ubuntu-latest
     container:
-      image: centos:centos7
+      image: alpine:3.16.0
     env:
       REZILION_LICENSE_KEY: ${{ secrets.REZILION_LICENSE_KEY }}
-      REZILION_ACCESS_TOKEN: ${{ secrets.REZILION_ACCESS_TOKEN }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/Rezilion
+        with:
+          image_name: 'alpine:3.16.0'
+          mode: 'start'
+          command: sleep 5
+
+  rezilion:
+    needs: [test_runtimes, test_alpine]
+    runs-on: ubuntu-latest
+    container:
+      image: rezilion/validate-ci:b63c85d0
+    env:
+      REZILION_LICENSE_KEY: ${{ secrets.REZILION_LICENSE_KEY }}
       REZILION_DONT_RUN_REMEDIATE: true
     steps:
       - uses: actions/checkout@v3
-      - uses: ./.github/actions/Rezilion #example using the private action
+      - uses: ./.github/actions/Rezilion
         with:
           mode: 'validate'
-              
-  
