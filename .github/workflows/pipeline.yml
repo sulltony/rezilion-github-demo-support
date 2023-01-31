@@ -10,13 +10,13 @@ jobs:
  
     steps:
       - uses: actions/checkout@v3
-      - uses: Rezilion/github-action@v2.5.1 
+      - uses: Rezilion/github-action@v2.6.0 
         with:
           mode: 'start'
           image_name: 'nginx:latest'
           command: 'sleep 5'
           
-      - uses: Rezilion/github-action@v2.5.1 
+      - uses: Rezilion/github-action@v2.6.0 
         with:
           mode: 'start'
           image_name: 'nginx:latest'
@@ -33,7 +33,8 @@ jobs:
       REZILION_DONT_RUN_REMEDIATE: true
     steps:
       - uses: actions/checkout@v3
-      - uses: ./.github/actions/Rezilion #example using the private action
+     # - uses: ./.github/actions/Rezilion #example using the private action
+      - uses: Rezilion/github-action@v2.6.0 
         with:
           mode: 'validate'
               
