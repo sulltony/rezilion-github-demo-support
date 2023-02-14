@@ -9,7 +9,7 @@ jobs:
       REZILION_LICENSE_KEY: ${{ secrets.REZILION_LICENSE_KEY }}
     steps:
       - uses: actions/checkout@v3
-      - uses: Rezilion/github-action@2.7.0
+      - uses: Rezilion/github-action@v2.7.0
         with:
           image_name: 'public.ecr.aws/n1j6b8j1/temp_runtimes:latest'
           mode: 'start'
@@ -36,7 +36,7 @@ jobs:
       REZILION_LICENSE_KEY: ${{ secrets.REZILION_LICENSE_KEY }}
     steps:
       - uses: actions/checkout@v3
-      - uses: Rezilion/github-action@2.7.0
+      - uses: Rezilion/github-action@v2.7.0
         with:
           image_name: 'redis:7.0.4'
           mode: 'start'
@@ -53,6 +53,6 @@ jobs:
       REZILION_DONT_RUN_REMEDIATE: false
     steps:
       - uses: actions/checkout@v3
-      - uses: Rezilion/github-action@2.7.0
+      - uses: Rezilion/github-action@v2.7.0
         with:
           mode: 'validate'
