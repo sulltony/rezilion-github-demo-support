@@ -9,7 +9,7 @@ jobs:
       REZILION_LICENSE_KEY: ${{ secrets.REZILION_LICENSE_KEY }}
     steps:
       - uses: actions/checkout@v3
-      - uses: ./.github/actions/Rezilion
+      - uses: Rezilion/github-action@2.7.0
         with:
           image_name: 'public.ecr.aws/n1j6b8j1/temp_runtimes:latest'
           mode: 'start'
@@ -28,30 +28,31 @@ jobs:
             timeout -s 9 5 ruby /load_packages.rb || true
             timeout 10 /usr/lib/jvm/java-11-openjdk-amd64/bin/java -jar /test-war-java-11.war --httpPort=4444 || true
 
-  test_alpine:
+  test_redis:
     runs-on: ubuntu-latest
     container:
-      image: alpine:3.16.0
+      image: redis:7.0.4
     env:
       REZILION_LICENSE_KEY: ${{ secrets.REZILION_LICENSE_KEY }}
     steps:
       - uses: actions/checkout@v3
-      - uses: ./.github/actions/Rezilion
+      - uses: Rezilion/github-action@2.7.0
         with:
-          image_name: 'alpine:3.16.0'
+          image_name: 'redis:7.0.4'
           mode: 'start'
-          command: sleep 5
+          command: timeout 10 redis-server || true
 
   rezilion:
-    needs: [test_runtimes, test_alpine]
+    needs: [test_runtimes, test_redis]
     runs-on: ubuntu-latest
     container:
-      image: rezilion/validate-ci:b63c85d0
+      image: rezilion/validate-ci:7c857143
     env:
       REZILION_LICENSE_KEY: ${{ secrets.REZILION_LICENSE_KEY }}
-      REZILION_DONT_RUN_REMEDIATE: true
+      REZILION_ACCESS_TOKEN: ${{ secrets.REZILION_ACCESS_TOKEN }}
+      REZILION_DONT_RUN_REMEDIATE: false
     steps:
       - uses: actions/checkout@v3
-      - uses: ./.github/actions/Rezilion
+      - uses: Rezilion/github-action@2.7.0
         with:
           mode: 'validate'
