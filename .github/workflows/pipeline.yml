@@ -10,7 +10,7 @@ jobs:
  
     steps:
       - uses: actions/checkout@v3
-      - uses: Rezilion/github-action@v2.5.1 #example using the public action
+      - uses: Rezilion/github-action@v2.7.0 #example using the public action
         with:
           mode: 'start'
           image_name: 'nginx:latest'
