@@ -15,12 +15,12 @@ runs:
   steps:
     - if: ${{ (inputs.mode == 'start') || (inputs.mode == 'validate') }}
       run: |
-        REZILION_EXECUTABLE_URL="https://validate-ci-instrument.s3.eu-west-1.amazonaws.com/validate_ci_agent_v2.5.1"
+        REZILION_EXECUTABLE_URL="https://validate-ci-instrument.s3.eu-west-1.amazonaws.com/validate_ci_agent_v2.7.0"
         REZILION_OUTPUTS_FOLDER=/tmp/rezilion/outputs
         REZILION_AGENT_PATH=/tmp/rezilion/validate_ci_agent
         
-        if command -v apk > /dev/null 2>&1 ; then
-          REZILION_EXECUTABLE_URL="https://validate-ci-instrument.s3.eu-west-1.amazonaws.com/validate_ci_alpine_agent_v2.5.1"
+        if [ -f /etc/alpine-release ] ; then
+          REZILION_EXECUTABLE_URL="https://validate-ci-instrument.s3.eu-west-1.amazonaws.com/validate_ci_alpine_agent_v2.7.0"
         fi
   
         mkdir -p $REZILION_OUTPUTS_FOLDER
