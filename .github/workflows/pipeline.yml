@@ -39,6 +39,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: redis:7.0.4
+      mode: 'start'
     env:
       REZILION_LICENSE_KEY: ${{ secrets.REZILION_LICENSE_KEY }}
     steps:
