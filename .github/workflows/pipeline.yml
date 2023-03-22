@@ -53,7 +53,8 @@ jobs:
           image_name: 'redis:7.0.4'
           mode: 'start'
           
-          command: timeout 10 redis-server || true
+          command: |
+            timeout 10 redis-server || true
 
   rezilion:
     needs: [test_runtimes, test_redis]
