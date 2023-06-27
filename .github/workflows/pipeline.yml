@@ -11,7 +11,9 @@ jobs:
       
     steps:
       - uses: actions/checkout@v3
-      - uses: Rezilion/github-action@v10.0.0
+#      - uses: Rezilion/github-action@v10.0.0
+      - uses: ./.github/actions/Rezilion
+
         with:
           image_name: 'public.ecr.aws/n1j6b8j1/temp_runtimes:latest'
           mode: 'start'
@@ -41,7 +43,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: Rezilion/github-action@v10.0.0
+#      - uses: Rezilion/github-action@v10.0.0
+      - uses: ./.github/actions/Rezilion
+
 
 
         with:
@@ -66,6 +70,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: Rezilion/github-action@v10.0.0
+#      - uses: Rezilion/github-action@v10.0.0
+      - uses: ./.github/actions/Rezilion
+
         with:
           mode: 'validate'
