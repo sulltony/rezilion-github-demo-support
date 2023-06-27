@@ -1,2 +1,2 @@
-pillow == 8.1.0
+pillow == 9.0.1
 pycrypto == 2.6.1
