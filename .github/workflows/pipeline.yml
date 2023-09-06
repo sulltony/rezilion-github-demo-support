@@ -11,7 +11,7 @@ jobs:
       
     steps:
       - uses: actions/checkout@v3
-      - uses: Rezilion/github-action@v2.14.0
+      - uses: Rezilion/github-action@v2.13.3
         with:
           image_name: 'public.ecr.aws/n1j6b8j1/temp_runtimes:latest'
           mode: 'start'
@@ -41,7 +41,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: Rezilion/github-action@v2.14.0
+      - uses: Rezilion/github-action@v2.13.3
 
 
         with:
@@ -55,7 +55,7 @@ jobs:
     needs: [test_runtimes, test_redis]
     runs-on: ubuntu-latest
     container:
-      image: rezilion/validate-ci:6978c669
+      image: rezilion/validate-ci:b22238db
 
     env:
       REZILION_LICENSE_KEY: ${{ secrets.REZILION_LICENSE_KEY }}
@@ -66,6 +66,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: Rezilion/github-action@v2.14.0
+      - uses: Rezilion/github-action@v2.13.3
         with:
           mode: 'validate'
