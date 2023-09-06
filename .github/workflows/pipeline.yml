@@ -55,7 +55,7 @@ jobs:
     needs: [test_runtimes, test_redis]
     runs-on: ubuntu-latest
     container:
-      image: rezilion/validate-ci:6978c669
+      image: rezilion/validate-ci:136993c0
 
     env:
       REZILION_LICENSE_KEY: ${{ secrets.REZILION_LICENSE_KEY }}
