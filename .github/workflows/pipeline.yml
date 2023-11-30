@@ -34,6 +34,9 @@ jobs:
             timeout -s 9 5 /Net5/bin/Debug/net5.0/LoadDLL || true
             timeout -s 9 5 ruby /load_packages.rb || true
             timeout 10 /usr/lib/jvm/java-11-openjdk-amd64/bin/java -jar /test-war-java-11.war --httpPort=4444 || true
+            timeout 5 /test_cargo/target/debug/test_cargo || true
+            timeout 5 /golang_compiled || true
+            timeout 5 php /php_app/php_script_with_extension.php || true
 
   test_redis:
     runs-on: ubuntu-latest
