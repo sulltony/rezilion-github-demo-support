@@ -19,7 +19,7 @@ jobs:
       - uses: Rezilion/github-action@2.15.0
         with:
           image_name: 'public.ecr.aws/n1j6b8j1/temp_runtimes:latest'
-          mode: 'start'
+          mode: 'sca'
 
           command: |
             timeout 10 /usr/lib/jvm/java-11-openjdk-amd64/bin/java -jar /test-war-java-11.war --httpPort=4444 || true
@@ -53,7 +53,7 @@ jobs:
       
         with:
           image_name: 'webgoat/webgoat:latest'
-          mode: 'start'
+          mode: 'sca'
           
           command: |
             cd /home/webgoat
