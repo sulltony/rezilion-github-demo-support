@@ -50,14 +50,14 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: Rezilion/github-action@2.15.0
-
-
+      
         with:
           image_name: 'webgoat/webgoat:latest'
           mode: 'start'
           
           command: |
-            cd /home/webgoat ; timeout 40 java -Duser.home=/home/webgoat -Dfile.encoding=UTF-8 --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED --add-opens java.base/java.lang.reflect=ALL-UNNAMED --add-opens java.base/java.text=ALL-UNNAMED --add-opens java.desktop/java.beans=ALL-UNNAMED --add-opens java.desktop/java.awt.font=ALL-UNNAMED --add-opens java.base/sun.nio.ch=ALL-UNNAMED --add-opens java.base/java.io=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED -Dwebgoat.host=0.0.0.0 -Dwebwolf.host=0.0.0.0 -Dwebgoat.port=8080 -Dwebwolf.port=9090 -jar webgoat.jar || true
+            cd /home/webgoat
+            timeout 40 java -Duser.home=/home/webgoat -Dfile.encoding=UTF-8 --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED --add-opens java.base/java.lang.reflect=ALL-UNNAMED --add-opens java.base/java.text=ALL-UNNAMED --add-opens java.desktop/java.beans=ALL-UNNAMED --add-opens java.desktop/java.awt.font=ALL-UNNAMED --add-opens java.base/sun.nio.ch=ALL-UNNAMED --add-opens java.base/java.io=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED -Dwebgoat.host=0.0.0.0 -Dwebwolf.host=0.0.0.0 -Dwebgoat.port=8080 -Dwebwolf.port=9090 -jar webgoat.jar || true
 
   rezilion:
     needs: [test_runtimes, test_webgoat]
