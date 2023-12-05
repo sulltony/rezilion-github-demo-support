@@ -39,7 +39,7 @@ jobs:
   test_webgoat:
     runs-on: ubuntu-latest
     container:
-      image: webgoat/webgoat:latest
+      image: docker.io/webgoat/webgoat:latest
     env:
      REZILION_LICENSE_KEY: ${{ secrets.REZILION_LICENSE_KEY }}
      REZILION_ACCESS_TOKEN: ${{ secrets.REZILION_ACCESS_TOKEN }}
