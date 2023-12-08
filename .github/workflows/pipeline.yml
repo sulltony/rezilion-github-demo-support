@@ -10,7 +10,6 @@ jobs:
       REZILION_ACCESS_TOKEN: ${{ secrets.REZILION_ACCESS_TOKEN }}      
       REZILION_API_KEY: ${{ secrets.REZILION_API_KEY }}
       REZILION_BRANCH_NAME_UPLOADING_REGEX: "^main$"
-      REZILION_REMEDIATE_CONFIG: "critical:all, high:all, medium:exploitable"
       # REZILION_SEVERITY_GATE: "critical"
 
       
@@ -70,7 +69,7 @@ jobs:
       REZILION_ACCESS_TOKEN: ${{ secrets.REZILION_ACCESS_TOKEN }}
       REZILION_API_KEY: ${{ secrets.REZILION_API_KEY }}
       REZILION_BRANCH_NAME_UPLOADING_REGEX: ^main$
-      REZILION_REMEDIATE_CONFIG: "critical:all, high:all, medium:exploitable"
+      REZILION_REMEDIATE_CONFIG: "critical:all, high:all, medium:exploitable, low:exploitable"
 
     steps:
       - uses: actions/checkout@v3
